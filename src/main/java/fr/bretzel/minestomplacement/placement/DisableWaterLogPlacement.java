@@ -1,17 +1,17 @@
-package fr.bretzel.minestomplacement;
+package fr.bretzel.minestomplacement.placement;
 
-import fr.als.core.block.blockstate.BlockState;
-import fr.als.core.block.blockstate.state.Face;
-import fr.als.core.block.blockstate.state.Facing;
+import fr.bretzel.minestomstates.BlockState;
+import fr.bretzel.minestomstates.state.BooleanState;
+import fr.bretzel.minestomstates.state.Facing;
+import fr.bretzel.minestomplacement.ALSBlockPlacement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
-public class GrindstonePlacement extends ALSBlockPlacement {
-
-    public GrindstonePlacement() {
-        super(Block.GRINDSTONE);
+public class DisableWaterLogPlacement extends ALSBlockPlacement {
+    public DisableWaterLogPlacement(Block block) {
+        super(block);
     }
 
     @Override
@@ -31,10 +31,6 @@ public class GrindstonePlacement extends ALSBlockPlacement {
 
     @Override
     public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
-        if (blockFace == Facing.UP)
-            blockState.set(Face.FLOOR);
-        else if (blockFace == Facing.DOWN)
-            blockState.set(Face.CEILING);
-        else blockState.set(Face.WALL);
+        blockState.set(BooleanState.Of("waterlogged", false));
     }
 }

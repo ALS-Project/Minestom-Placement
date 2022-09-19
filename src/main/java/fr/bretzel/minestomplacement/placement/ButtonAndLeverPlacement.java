@@ -1,15 +1,16 @@
-package fr.bretzel.minestomplacement;
+package fr.bretzel.minestomplacement.placement;
 
-import fr.als.core.block.blockstate.BlockState;
-import fr.als.core.block.blockstate.state.Facing;
+import fr.bretzel.minestomstates.BlockState;
+import fr.bretzel.minestomstates.state.Face;
+import fr.bretzel.minestomstates.state.Facing;
+import fr.bretzel.minestomplacement.ALSBlockPlacement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
-public class AnvilPlacement extends ALSBlockPlacement {
-
-    public AnvilPlacement(Block block) {
+public class ButtonAndLeverPlacement extends ALSBlockPlacement {
+    public ButtonAndLeverPlacement(Block block) {
         super(block);
     }
 
@@ -30,6 +31,12 @@ public class AnvilPlacement extends ALSBlockPlacement {
 
     @Override
     public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
-        blockState.set(blockState.get(Facing.class).rotateY());
+        if (blockFace == Facing.UP) {
+            blockState.set(Face.FLOOR);
+        } else if (blockFace == Facing.DOWN) {
+            blockState.set(Face.CEILING);
+        } else {
+            blockState.set(Face.WALL);
+        }
     }
 }

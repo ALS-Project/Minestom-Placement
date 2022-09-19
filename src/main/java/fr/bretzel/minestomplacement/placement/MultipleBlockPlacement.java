@@ -1,8 +1,9 @@
-package fr.bretzel.minestomplacement;
+package fr.bretzel.minestomplacement.placement;
 
-import fr.als.core.block.blockstate.BlockStateManager;
-import fr.als.core.block.blockstate.state.Facing;
+import fr.bretzel.minestomstates.BlockStateManager;
+import fr.bretzel.minestomstates.state.Facing;
 import fr.als.core.block.shape.BoxManager;
+import fr.bretzel.minestomplacement.ALSBlockPlacement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;

@@ -1,8 +1,9 @@
-package fr.bretzel.minestomplacement;
+package fr.bretzel.minestomplacement.placement;
 
-import fr.als.core.block.blockstate.BlockState;
-import fr.als.core.block.blockstate.state.Facing;
-import fr.als.core.block.blockstate.state.Part;
+import fr.bretzel.minestomplacement.ALSBlockPlacement;
+import fr.bretzel.minestomstates.BlockState;
+import fr.bretzel.minestomstates.state.Facing;
+import fr.bretzel.minestomstates.state.Part;
 import fr.als.core.utils.ALSBlock;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
@@ -17,8 +18,8 @@ public class BedPlacement extends ALSBlockPlacement {
 
     @Override
     public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
-        var alsBlock = new ALSBlock(instance, blockPosition);
-        return alsBlock.block().isAir() && alsBlock.relative(Facing.fromYaw(pl.getPosition().yaw())).block().isAir();
+        var alsBlock = instance.getBlock(blockPosition);
+        return alsBlock.isAir() && alsBlock.relative(Facing.fromYaw(pl.getPosition().yaw())).block().isAir();
     }
 
     @Override

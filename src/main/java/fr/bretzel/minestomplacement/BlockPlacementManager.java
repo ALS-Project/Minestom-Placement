@@ -1,5 +1,6 @@
 package fr.bretzel.minestomplacement;
 
+import fr.bretzel.minestomplacement.placement.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;

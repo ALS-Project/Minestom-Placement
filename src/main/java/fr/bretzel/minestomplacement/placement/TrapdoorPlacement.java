@@ -1,10 +1,11 @@
-package fr.bretzel.minestomplacement;
+package fr.bretzel.minestomplacement.placement;
 
-import fr.als.core.block.blockstate.BlockState;
-import fr.als.core.block.blockstate.state.Facing;
-import fr.als.core.block.blockstate.state.Half;
+import fr.bretzel.minestomstates.BlockState;
+import fr.bretzel.minestomstates.state.Facing;
+import fr.bretzel.minestomstates.state.Half;
 import fr.als.core.raytrace.RayTrace;
 import fr.als.core.raytrace.RayTraceContext;
+import fr.bretzel.minestomplacement.ALSBlockPlacement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;

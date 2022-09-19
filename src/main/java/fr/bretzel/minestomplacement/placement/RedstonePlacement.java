@@ -1,10 +1,11 @@
-package fr.bretzel.minestomplacement;
+package fr.bretzel.minestomplacement.placement;
 
-import fr.als.core.block.blockstate.BlockState;
-import fr.als.core.block.blockstate.state.Directional;
-import fr.als.core.block.blockstate.state.Facing;
-import fr.als.core.block.blockstate.state.IntegerState;
-import fr.als.core.block.blockstate.state.RedstoneWireHeight;
+import fr.bretzel.minestomstates.BlockState;
+import fr.bretzel.minestomstates.state.Directional;
+import fr.bretzel.minestomstates.state.Facing;
+import fr.bretzel.minestomstates.state.IntegerState;
+import fr.bretzel.minestomstates.state.RedstoneWireHeight;
+import fr.bretzel.minestomplacement.ALSBlockPlacement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;

@@ -1,21 +1,23 @@
-package fr.bretzel.minestomplacement;
+package fr.bretzel.minestomplacement.placement;
 
-import fr.als.core.block.blockstate.BlockState;
-import fr.als.core.block.blockstate.state.Face;
-import fr.als.core.block.blockstate.state.Facing;
+import fr.bretzel.minestomstates.BlockState;
+import fr.bretzel.minestomstates.state.Facing;
+import fr.als.core.utils.ALSBlock;
+import fr.bretzel.minestomplacement.ALSBlockPlacement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 
-public class ButtonAndLeverPlacement extends ALSBlockPlacement {
-    public ButtonAndLeverPlacement(Block block) {
-        super(block);
+public class WeepingVines extends ALSBlockPlacement {
+
+    public WeepingVines() {
+        super(Block.WEEPING_VINES);
     }
 
     @Override
     public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
-        return true;
+        return blockFace == Facing.DOWN;
     }
 
     @Override
@@ -30,12 +32,11 @@ public class ButtonAndLeverPlacement extends ALSBlockPlacement {
 
     @Override
     public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
-        if (blockFace == Facing.UP) {
-            blockState.set(Face.FLOOR);
-        } else if (blockFace == Facing.DOWN) {
-            blockState.set(Face.CEILING);
-        } else {
-            blockState.set(Face.WALL);
+        var selfBlock = new ALSBlock(instance, blockPosition);
+        var upBlock = selfBlock.up();
+
+        if (upBlock.block() == Block.WEEPING_VINES) {
+            instance.setBlock(upBlock.position(), Block.WEEPING_VINES_PLANT);
         }
     }
 }

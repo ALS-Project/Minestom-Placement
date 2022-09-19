@@ -1,9 +1,10 @@
-package fr.bretzel.minestomplacement;
+package fr.bretzel.minestomplacement.placement;
 
-import fr.als.core.block.blockstate.BlockState;
-import fr.als.core.block.blockstate.state.Facing;
-import fr.als.core.block.blockstate.state.IntegerState;
+import fr.bretzel.minestomstates.BlockState;
+import fr.bretzel.minestomstates.state.Facing;
+import fr.bretzel.minestomstates.state.IntegerState;
 import fr.als.core.utils.math.MathsUtils;
+import fr.bretzel.minestomplacement.ALSBlockPlacement;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
