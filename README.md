@@ -11,7 +11,7 @@ You can use 'Minestom Placement' like as libraries or like as extension
 
 - ##### Libraries Usage:
   Add the jitpack repository
-- 
+
 ```groovy
 repositories {
   maven { url 'https://jitpack.io' }
