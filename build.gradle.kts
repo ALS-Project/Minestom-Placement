@@ -12,9 +12,6 @@ repositories {
 
 dependencies {
     implementation("com.github.Minestom:Minestom:18c46481f4")
-    implementation("com.github.ALS-Project:Minestom-States:0a387c3237")
-}
-
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+    implementation("com.github.ALS-Project:Minestom-States:d628c0750f")
+    implementation("com.github.ALS-Project:Minestom-Utilities:b65a76ab44")
 }
