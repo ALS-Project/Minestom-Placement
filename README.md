@@ -3,11 +3,11 @@
 
 [![](https://jitpack.io/v/ALS-Project/Minestom-Utilities.svg)](https://jitpack.io/#ALS-Project/Minestom-Utilities)
 
-> You can use 'Minestom Placement' like as libraries or like as extension
+You can use 'Minestom Placement' like as libraries or like as extension
 
 ## Usage example
 ##### Extension Usage:
-> Just [download](https://github.com/ALS-Project/Minestom-Placement/releases/latest) the last release build and put it to the extension folder
+Just [download](https://github.com/ALS-Project/Minestom-Placement/releases/latest) the last release build and put it to the extension folder
 
 ##### Libraries Usage:
 Add the jitpack repository
