@@ -1,0 +1,5 @@
+{
+  "entrypoint": "fr.bretzel.minestom.placement.BlockPlacementExtension",
+  "name": "BlockPlacementExtension",
+  "version": "1.0.0"
+}
