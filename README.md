@@ -7,10 +7,11 @@ You can use 'Minestom Placement' like as libraries or like as extension
 
 ## Usage example
 - ##### Extension Usage:
-Just [download](https://github.com/ALS-Project/Minestom-Placement/releases/latest) the last release build and put it to the extension folder
+  Just [download](https://github.com/ALS-Project/Minestom-Placement/releases/latest) the last release build and put it to the extension folder
 
 - ##### Libraries Usage:
-Add the jitpack repository
+  Add the jitpack repository
+- 
 ```groovy
 repositories {
   maven { url 'https://jitpack.io' }
