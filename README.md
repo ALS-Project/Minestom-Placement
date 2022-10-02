@@ -1,7 +1,7 @@
 # Minestom Placement
 > 'Minestom Placement' is a simple re implementation of **Minecraft vanilla** block placement for [Minestom](https://minestom.net/)
 
-[![](https://jitpack.io/v/ALS-Project/Minestom-Utilities.svg)](https://jitpack.io/#ALS-Project/Minestom-Utilities)
+[![](https://jitpack.io/v/ALS-Project/Minestom-Placement.svg)](https://jitpack.io/#ALS-Project/Minestom-Placement______)
 
 You can use 'Minestom Placement' like as libraries or like as extension
 
