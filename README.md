@@ -3,7 +3,7 @@
 
 [![](https://jitpack.io/v/ALS-Project/Minestom-Placement.svg)](https://jitpack.io/#ALS-Project/Minestom-Placement______)
 
-You can use 'Minestom Placement' like as libraries or like as extension
+You can use 'Minestom Placement' as a librarie or as an extension
 
 ## Usage example
 - ##### Extension Usage:
@@ -31,7 +31,7 @@ To Register **ALL** block placement rules just write this
 ```
 
 ## Development setup
-It's a gradle project, juste import that with your favorite IDE !
+It's a gradle project, just import it into your favorite IDE !
 
 ## License
 [![CeCILL License](https://img.shields.io/badge/License-CeCILL-green.svg)](http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.txt)
