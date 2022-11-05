@@ -1,7 +1,7 @@
 # Minestom Placement
 > 'Minestom Placement' is a simple re implementation of **Minecraft vanilla** block placement for [Minestom](https://minestom.net/)
 
-[![](https://jitpack.io/v/ALS-Project/Minestom-Placement.svg)](https://jitpack.io/#ALS-Project/Minestom-Placement______)
+[![](https://jitpack.io/v/ALS-Project/Minestom-Placement.svg)](https://jitpack.io/#ALS-Project/Minestom-Placement)
 
 You can use 'Minestom Placement' as a librarie or as an extension
 
@@ -28,6 +28,11 @@ dependencies {
 To Register **ALL** block placement rules just write this
 ```java
     BlockPlacementManager.register();
+```
+
+To Register a wanted block
+```java
+    BlockPlacementManager.register(Block.REDSTONE_TORCH);
 ```
 
 ## Development setup
