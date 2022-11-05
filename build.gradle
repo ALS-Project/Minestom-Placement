@@ -35,6 +35,8 @@ dependencies {
 }
 
 shadowJar {
+    archiveFileName = "${rootProject.name}-${version}-extension.jar"
+
     dependencies {
         exclude(dependency('com.github.Minestom:Minestom:.*'))
     }
