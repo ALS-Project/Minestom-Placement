@@ -42,8 +42,10 @@ shadowJar {
     minimize()
 }
 
-tasks {
-    build {
-        dependsOn(shadowJar)
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
     }
 }
