@@ -18,6 +18,10 @@ repositories {
     maven(url = "https://jitpack.io")
 }
 
+java {
+    withSourcesJar()
+}
+
 dependencies {
     implementation("com.github.Minestom:Minestom:$minestomVersion")
     implementation("com.github.ALS-Project:Minestom-States:$statesVersion")
