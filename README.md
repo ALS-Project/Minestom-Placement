@@ -25,12 +25,12 @@ dependencies {
 }
 ```
 
-To Register **ALL** block placement rules just write this
+To register **ALL** block placement rules just write this
 ```java
     BlockPlacementManager.register();
 ```
 
-To Register a wanted block
+To register a specific block
 ```java
     BlockPlacementManager.register(Block.REDSTONE_TORCH);
 ```
