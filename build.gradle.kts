@@ -5,7 +5,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-var minestomVersion = "18c46481f4"
+var minestomVersion = "42195c536b"
 var statesVersion = "d42b0086f1"
 var utilityVersion = "ba76b43d5b"
 
