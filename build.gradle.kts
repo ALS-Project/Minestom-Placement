@@ -1,16 +1,17 @@
 plugins {
     `kotlin-dsl`
     `maven-publish`
-    id("java")
+    java
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
-
-group = "fr.bretzel.minestom.placement"
-version = "1.1.1"
 
 var minestomVersion = "18c46481f4"
 var statesVersion = "d42b0086f1"
 var utilityVersion = "ba76b43d5b"
+var version = "1.1.1"
+
+group = "fr.bretzel.minestom.placement"
+version = "$version"
 
 repositories {
     mavenCentral()
@@ -42,7 +43,7 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "fr.bretzel.minestom.placement"
             artifactId = "MinestomPlacement"
-            version = "1.1.1"
+            version = "$version"
 
             from(components["java"])
         }
