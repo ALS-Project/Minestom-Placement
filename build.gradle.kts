@@ -5,6 +5,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
+var minestomVersion = "42195c536b"
 var statesVersion = "d42b0086f1"
 var utilityVersion = "ba76b43d5b"
 
@@ -22,7 +23,7 @@ java {
 }
 
 dependencies {
-    implementation("com.github.Minestom:Minestom:-SNAPSHOT")
+    implementation("com.github.Minestom:Minestom:$minestomVersion")
     implementation("com.github.ALS-Project:Minestom-States:$statesVersion")
     implementation("com.github.ALS-Project:Minestom-Utilities:$utilityVersion")
 }
