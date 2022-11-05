@@ -5,7 +5,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-group = "fr.bretzel.minestomplacement"
+group = "fr.bretzel.minestom.placement"
 version = "1.0-SNAPSHOT"
 
 var minestomVersion = "18c46481f4"
@@ -34,3 +34,14 @@ tasks {
         exclude("com.github.Minestom:Minestom:*")
     }
 }
+
+
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
+}
+
