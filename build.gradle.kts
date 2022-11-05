@@ -1,12 +1,12 @@
 plugins {
     `kotlin-dsl`
+    `maven-publish`
     id("java")
-    id("maven-publish")
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 group = "fr.bretzel.minestom.placement"
-version = "1.0-SNAPSHOT"
+version = "1.1.1"
 
 var minestomVersion = "18c46481f4"
 var statesVersion = "d42b0086f1"
@@ -40,6 +40,10 @@ tasks {
 publishing {
     publications {
         create<MavenPublication>("maven") {
+            groupId = "fr.bretzel.minestom.placement"
+            artifactId = "library"
+            version = "1.1.1"
+
             from(components["java"])
         }
     }
