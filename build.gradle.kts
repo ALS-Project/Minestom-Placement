@@ -8,10 +8,9 @@ plugins {
 var minestomVersion = "18c46481f4"
 var statesVersion = "d42b0086f1"
 var utilityVersion = "ba76b43d5b"
-var version = "1.1.1"
 
 group = "fr.bretzel.minestom.placement"
-version = "$version"
+version = "1.1.1"
 
 repositories {
     mavenCentral()
@@ -33,20 +32,6 @@ tasks {
     named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
         minimize()
         exclude("com.github.Minestom:Minestom:*")
-    }
-}
-
-
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "fr.bretzel.minestom.placement"
-            artifactId = "MinestomPlacement"
-            version = "$version"
-
-            from(components["java"])
-        }
     }
 }
 
