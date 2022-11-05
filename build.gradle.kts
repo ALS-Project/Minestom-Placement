@@ -6,8 +6,8 @@ plugins {
 }
 
 var minestomVersion = "42195c536b"
-var statesVersion = "d42b0086f1"
-var utilityVersion = "ba76b43d5b"
+var statesVersion = "e7732512f4"
+var utilityVersion = "227252e316"
 
 group = "fr.bretzel.minestom.placement"
 version = "1.1.1"
