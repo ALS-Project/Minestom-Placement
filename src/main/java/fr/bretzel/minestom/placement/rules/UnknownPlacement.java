@@ -1,21 +1,17 @@
 package fr.bretzel.minestom.placement.rules;
 
+import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.Facing;
-import fr.bretzel.minestom.placement.PlacementRule;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class UnknownPlacement extends PlacementRule {
 
     public UnknownPlacement(Block block) {
         super(block);
-        Logger LOGGER = LoggerFactory.getLogger(UnknownPlacement.class);
-        LOGGER.info(block.name() + " has the don't have a special placement.");
     }
 
     @Override
