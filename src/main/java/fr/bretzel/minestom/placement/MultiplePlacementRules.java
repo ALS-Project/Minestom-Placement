@@ -2,9 +2,7 @@ package fr.bretzel.minestom.placement;
 
 import fr.bretzel.minestom.states.BlockStateManager;
 import fr.bretzel.minestom.states.state.Facing;
-import fr.bretzel.minestom.utils.block.BoxManager;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -45,20 +43,15 @@ public class MultiplePlacementRules extends BlockPlacementRule {
         if (!currentBlock.isAir() && !currentBlock.isLiquid() && !currentBlock.compare(block))
             return currentBlock;
 
-        var shape = BoxManager.get(currentBlock).getBoundingBox();
-        var playerBox = player.getBoundingBox();
-
-        //Player in block
-        if (shape.intersect(new Vec(playerBox.minX(), playerBox.minY(), playerBox.minZ()), new Vec(playerBox.maxX(), playerBox.maxY(), playerBox.maxZ())))
-            return currentBlock;
-
         //Get the current block state
         var blockState = BlockStateManager.get(block);
 
         //Block cannot be placed
-        for (var placement : getPlacementRules())
-            if (!placement.canPlace(instance, Facing.parse(blockFace), blockPosition, blockState, player))
+        for (var placement : getPlacementRules()) {
+            if (!placement.canPlace(instance, Facing.parse(blockFace), blockPosition, blockState, player)) {
                 return getBlock();
+            }
+        }
 
         for (var placement : getPlacementRules())
             placement.place(instance, blockState, Facing.parse(blockFace), blockPosition, player);
