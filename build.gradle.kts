@@ -1,4 +1,5 @@
 plugins {
+    `kotlin-dsl`
     id("java")
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
@@ -12,6 +13,7 @@ var utilityVersion = "ba76b43d5b"
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
     maven(url = "https://jitpack.io")
 }
 
