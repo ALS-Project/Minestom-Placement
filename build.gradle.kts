@@ -41,7 +41,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "fr.bretzel.minestom.placement"
-            artifactId = "library"
+            artifactId = "MinestomPlacement"
             version = "1.1.1"
 
             from(components["java"])
