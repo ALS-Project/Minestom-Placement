@@ -1,11 +1,8 @@
 package fr.bretzel.minestom.placement;
 
 import fr.bretzel.minestom.states.BlockState;
-import fr.bretzel.minestom.states.state.Facing;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 public abstract class PlacementRule {
     private final Block block;
@@ -19,36 +16,22 @@ public abstract class PlacementRule {
     }
 
     /**
-     * @param instance      the instance when the block is trying to be placed
-     * @param blockFace     the right-clicked face for the player
-     * @param blockPosition the block position of the block
-     * @param blockState    a blocksate integration
-     * @param pl            the player
      * @return true if the block can be placed
      */
-    public abstract boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl);
+    public abstract boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState);
 
     /**
-     * @param instance      the instance when the block is trying to be placed
-     * @param blockPosition the block position of the block
-     * @param blockState    a blocksate integration
      * @return true if the block can be updated
      */
-    public abstract boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState);
+    public abstract boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState);
 
     /**
-     * @param instance      the instance when the block is trying to be placed
-     * @param blockPosition the block position of the block
-     * @param blockState    a blocksate integration
+     * @param updateState update state
      */
-    public abstract void update(Instance instance, Point blockPosition, BlockState blockState);
+    public abstract void update(BlockState blockState, BlockPlacementRule.UpdateState updateState);
 
     /**
-     * @param instance      the instance when the block is trying to be placed
-     * @param blockFace     the right-clicked face for the player
-     * @param blockPosition the block position of the block
-     * @param blockState    a blocksate integration
-     * @param pl            the player
+     * @param placementState placement state
      */
-    public abstract void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl);
+    public abstract void place(BlockState blockState, BlockPlacementRule.PlacementState placementState);
 }

@@ -117,7 +117,7 @@ public class BlockPlacementManager {
         if (blockName.contains("fence_gate"))
             placementRules.addBlockPlacement(new FenceGatePlacement(block));
 
-        if (placementRules.getPlacementRules().size() == 0)
+        if (placementRules.getPlacementRules().isEmpty())
             placementRules.addBlockPlacement(new UnknownPlacement(block));
 
         blockManager.registerBlockPlacementRule(placementRules);

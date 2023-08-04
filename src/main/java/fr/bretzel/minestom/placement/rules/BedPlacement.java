@@ -5,10 +5,9 @@ import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.Facing;
 import fr.bretzel.minestom.states.state.Part;
 import fr.bretzel.minestom.utils.block.BlockUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 public class BedPlacement extends PlacementRule {
 
@@ -17,24 +16,28 @@ public class BedPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
-        var blockUtils = new BlockUtils(instance, blockPosition);
-        return blockUtils.block().isAir() && blockUtils.relative(Facing.fromYaw(pl.getPosition().yaw())).block().isAir();
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = (Instance) placementState.instance();
+        var blockUtils = new BlockUtils(instance, placementState.placePosition());
+        return blockUtils.block().isAir() && blockUtils.relative(Facing.fromYaw(placementState.playerPosition().yaw())).block().isAir();
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return false;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
+
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = (Instance) placementState.instance();
+        var blockPosition = placementState.placePosition();
         var footBlock = new BlockUtils(instance, blockPosition);
-        var playerFacing = Facing.fromYaw(pl.getPosition().yaw());
+        var playerFacing = Facing.fromYaw(placementState.playerPosition().yaw());
         var headBlock = footBlock.relative(playerFacing);
 
         if (footBlock.block().isAir() && headBlock.block().isAir()) {

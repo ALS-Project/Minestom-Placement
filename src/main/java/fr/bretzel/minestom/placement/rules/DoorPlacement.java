@@ -6,12 +6,11 @@ import fr.bretzel.minestom.states.state.DoorHalf;
 import fr.bretzel.minestom.states.state.Facing;
 import fr.bretzel.minestom.states.state.Hinge;
 import fr.bretzel.minestom.utils.block.BlockUtils;
-import fr.bretzel.minestom.utils.raytrace.RayTrace;
-import fr.bretzel.minestom.utils.raytrace.RayTraceContext;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 public class DoorPlacement extends PlacementRule {
     public DoorPlacement(Block block) {
@@ -19,34 +18,40 @@ public class DoorPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
-        var self = new BlockUtils(instance, blockPosition);
-        return blockPosition.y() < 255 && self.block().isAir() && self.up().block().isAir() || !(blockFace == Facing.DOWN);
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = placementState.instance();
+        var blockPosition = placementState.placePosition();
+        var blockFace = placementState.blockFace();
+        var self = new BlockUtils((Instance) instance, blockPosition);
+        return blockPosition.y() < 255 && self.block().isAir() && self.up().block().isAir() || !(blockFace == BlockFace.BOTTOM);
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return false;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
 
     }
 
     @Override
-    public void place(Instance instance, BlockState selfState, Facing blockFace, Point blockPosition, Player pl) {
-        var facing = selfState.get(Facing.class);
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = (Instance) placementState.instance();
+        var blockPosition = placementState.placePosition();
+
+        var facing = blockState.get(Facing.class);
         var upBlock = new BlockUtils(instance, blockPosition).up();
         var upSate = upBlock.state();
 
         upSate.withBlock(block());
 
-        var hit = RayTrace.rayTraceBlock(new RayTraceContext(pl, 6)).getHit();
+        var hinge = calculateHinge(placementState.cursorPosition(), placementState.playerPosition().yaw());
 
-        var hinge = calculateHinge(hit, pl);
+        var blockFace = placementState.blockFace();
 
-        if (blockFace != Facing.DOWN && blockFace != Facing.UP) {
+        if (blockFace != BlockFace.BOTTOM && blockFace != BlockFace.TOP) {
             facing = facing.opposite();
         }
 
@@ -56,13 +61,13 @@ public class DoorPlacement extends PlacementRule {
 
         instance.setBlock(upBlock.position(), upSate.block());
 
-        selfState.set(DoorHalf.LOWER);
-        selfState.set(hinge);
-        selfState.set(facing);
+        blockState.set(DoorHalf.LOWER);
+        blockState.set(hinge);
+        blockState.set(facing);
     }
 
-    public Hinge calculateHinge(Point hit, Player player) {
-        var facing = Facing.fromYaw(player.getPosition().yaw());
+    public Hinge calculateHinge(Point hit, float yaw) {
+        var facing = Facing.fromYaw(yaw);
 
         var z = hit.z() - ((int) hit.z());
         var x = hit.x() - ((int) hit.x());

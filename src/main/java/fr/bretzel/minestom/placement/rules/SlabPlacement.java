@@ -1,16 +1,13 @@
 package fr.bretzel.minestom.placement.rules;
 
-import fr.bretzel.minestom.states.BlockState;
-import fr.bretzel.minestom.states.state.Facing;
-import fr.bretzel.minestom.states.state.SlabType;
 import fr.bretzel.minestom.placement.PlacementRule;
+import fr.bretzel.minestom.states.BlockState;
+import fr.bretzel.minestom.states.state.SlabType;
 import fr.bretzel.minestom.utils.block.BlockUtils;
-import fr.bretzel.minestom.utils.raytrace.RayTrace;
-import fr.bretzel.minestom.utils.raytrace.RayTraceContext;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 public class SlabPlacement extends PlacementRule {
     public SlabPlacement(Block block) {
@@ -18,28 +15,30 @@ public class SlabPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
-        Block bl = instance.getBlock(blockPosition);
-        return bl.isAir() || bl == block();
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var currentBlock = placementState.instance().getBlock(placementState.placePosition());
+        return currentBlock.isAir() || currentBlock == block();
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return false;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
 
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player player) {
-        var centerBlock = new BlockUtils(instance, blockPosition);
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = (Instance) placementState.instance();
+        var centerBlock = new BlockUtils(instance, placementState.placePosition());
+        var blockFace = placementState.blockFace();
         var downBlock = centerBlock.down();
         var upBlock = centerBlock.up();
 
-        if (blockFace == Facing.UP) {
+        if (blockFace == BlockFace.TOP) {
             if (downBlock.block() == block()) {
                 var downStates = downBlock.state();
                 var slabType = downStates.get(SlabType.class);
@@ -53,7 +52,7 @@ public class SlabPlacement extends PlacementRule {
             }
         }
 
-        if (blockFace == Facing.DOWN) {
+        if (blockFace == BlockFace.BOTTOM) {
             if (upBlock.block().compare(block())) {
                 var upStates = upBlock.state();
                 var slabType = upStates.get(SlabType.class);
@@ -67,22 +66,17 @@ public class SlabPlacement extends PlacementRule {
             }
         }
 
-        if (blockFace != Facing.UP && blockFace != Facing.DOWN) {
-            var result = RayTrace.rayTraceBlock(new RayTraceContext(player, 6));
+        if (blockFace != BlockFace.TOP && blockFace != BlockFace.BOTTOM) {
+            var hit = placementState.cursorPosition();
+            var y = hit.y() - (hit.blockY());
+            var currentSlabType = blockState.get(SlabType.class);
 
-            if (result != null && result.getHit() != null && !result.getHitBlock().isAir()) {
-                var hit = result.getHit();
-                var y = hit.y() - (hit.blockY());
-                var currentSlabType = blockState.get(SlabType.class);
-
-                if (y >= 0.5 && currentSlabType == SlabType.BOTTOM) {
-                    blockState.set(SlabType.TOP);
-                } else if (y <= 0.5 && currentSlabType == SlabType.TOP) {
-                    blockState.set(SlabType.DOUBLE);
-                } else {
-                    blockState.set((y >= 0.5) ? SlabType.TOP : SlabType.BOTTOM);
-                }
-
+            if (y >= 0.5 && currentSlabType == SlabType.BOTTOM) {
+                blockState.set(SlabType.TOP);
+            } else if (y <= 0.5 && currentSlabType == SlabType.TOP) {
+                blockState.set(SlabType.DOUBLE);
+            } else {
+                blockState.set((y >= 0.5) ? SlabType.TOP : SlabType.BOTTOM);
             }
         }
     }

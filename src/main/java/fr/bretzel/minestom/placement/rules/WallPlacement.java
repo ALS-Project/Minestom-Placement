@@ -1,19 +1,18 @@
 package fr.bretzel.minestom.placement.rules;
 
+import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.BlockStateManager;
 import fr.bretzel.minestom.states.FenceGateState;
 import fr.bretzel.minestom.states.WallState;
 import fr.bretzel.minestom.states.state.BooleanState;
 import fr.bretzel.minestom.states.state.Directional;
-import fr.bretzel.minestom.states.state.Facing;
 import fr.bretzel.minestom.states.state.WallHeight;
-import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.utils.block.BlockUtils;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 import java.util.stream.Stream;
 
@@ -24,23 +23,23 @@ public class WallPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
         return true;
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return true;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
-        updateState(blockState, instance, blockPosition);
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
+        updateState(blockState, (Instance) updateState.instance(), updateState.blockPosition());
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
-        updateState(blockState, instance, blockPosition);
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        updateState(blockState, (Instance) placementState.instance(), placementState.placePosition());
     }
 
     public void updateState(BlockState blockState, Instance instance, Point blockPosition) {

@@ -1,12 +1,11 @@
 package fr.bretzel.minestom.placement.rules;
 
+import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.Facing;
-import fr.bretzel.minestom.placement.PlacementRule;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -25,35 +24,36 @@ public class FacingPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
         return true;
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return false;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var blockFace = placementState.blockFace();
         var facing = blockFace;
+        var playerPosition = placementState.playerPosition();
 
-        if (!hasUpAndDown(blockState) && (blockFace == Facing.DOWN || blockFace == Facing.UP) || (onlyDirectional.contains(block()) && pl.getPosition().pitch() < 45.5))
-            facing = Facing.fromYaw(pl.getPosition().yaw());
+        if (!hasUpAndDown(blockState) && (blockFace == BlockFace.BOTTOM || blockFace == BlockFace.TOP) || (onlyDirectional.contains(block()) && playerPosition.pitch() < 45.5))
+            facing = Facing.fromYaw(playerPosition.yaw()).getMinestomBlockFace();
 
         if (needToBeInverted.contains(block()) || onlyDirectional.contains(block()))
-            facing = facing.opposite();
+            facing = facing.getOppositeFace();
 
-        blockState.set(facing);
+        blockState.set(Facing.parse(facing));
     }
 
     public boolean hasUpAndDown(BlockState blockState) {
         var facingValue = blockState.getAllStateValue(Facing.class);
         return facingValue.stream().anyMatch(facing -> facing == Facing.UP || facing == Facing.DOWN);
     }
-
 }

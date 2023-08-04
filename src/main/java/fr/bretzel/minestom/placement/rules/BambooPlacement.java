@@ -2,11 +2,9 @@ package fr.bretzel.minestom.placement.rules;
 
 import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
-import fr.bretzel.minestom.states.state.Facing;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.block.BlockUtils;
 
 public class BambooPlacement extends PlacementRule {
@@ -15,19 +13,24 @@ public class BambooPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = placementState.instance();
+        var blockPosition = placementState.placePosition();
         var bellowBlock = instance.getBlock(blockPosition.sub(0, 1, 0));
         var block = instance.getBlock(blockPosition);
         return (bellowBlock.isSolid() || bellowBlock == Block.BAMBOO_SAPLING) && (block.isAir());
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return true;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
+        var instance = (Instance) updateState.instance();
+        var blockPosition = updateState.blockPosition();
+
         var upper = new BlockUtils(instance, blockPosition);
         var bellow = new BlockUtils(instance, blockPosition).below();
 
@@ -41,7 +44,10 @@ public class BambooPlacement extends PlacementRule {
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = (Instance) placementState.instance();
+        var blockPosition = placementState.placePosition();
+
         var blockUtils = new BlockUtils(instance, blockPosition);
         var below = blockUtils.below();
 
@@ -49,6 +55,5 @@ public class BambooPlacement extends PlacementRule {
             blockState.withBlock(Block.BAMBOO_SAPLING);
         else if (below.getBlock() == Block.BAMBOO_SAPLING)
             instance.setBlock(blockPosition.sub(0, 1, 0), Block.BAMBOO);
-
     }
 }

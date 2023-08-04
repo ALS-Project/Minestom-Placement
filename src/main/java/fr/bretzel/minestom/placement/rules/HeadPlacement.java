@@ -1,18 +1,14 @@
 package fr.bretzel.minestom.placement.rules;
 
+import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.Facing;
-import fr.bretzel.minestom.placement.PlacementRule;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 public class HeadPlacement extends PlacementRule {
     private final Block wall_head;
-    private final BlockHandler skullHandler = MinecraftServer.getBlockManager().getHandler("minecraft:skull");
 
     public HeadPlacement(Block block, Block wall_head) {
         super(block);
@@ -21,30 +17,27 @@ public class HeadPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
         return true;
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return false;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
 
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
-        if (blockFace != Facing.UP && blockFace != Facing.DOWN) {
-            blockState.withBlock(wall_head);
-            blockState.set(blockFace);
-        }
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var blockFace = placementState.blockFace();
 
-        if (block() == Block.PLAYER_HEAD || block() == Block.PLAYER_WALL_HEAD) {
-            blockState.setBlockHandler(skullHandler);
-            blockState.setBlockNbt(pl.getItemInMainHand());
+        if (blockFace != BlockFace.TOP && blockFace != BlockFace.BOTTOM) {
+            blockState.withBlock(wall_head);
+            blockState.set(Facing.parse(blockFace));
         }
     }
 }

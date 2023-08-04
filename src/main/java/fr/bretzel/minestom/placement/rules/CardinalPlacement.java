@@ -1,15 +1,16 @@
 package fr.bretzel.minestom.placement.rules;
 
+import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.BooleanState;
 import fr.bretzel.minestom.states.state.Directional;
 import fr.bretzel.minestom.states.state.Facing;
-import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.utils.block.BlockUtils;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 import java.util.Arrays;
 import java.util.List;
@@ -67,8 +68,12 @@ public class CardinalPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
-        var block = new BlockUtils(instance, blockPosition);
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = placementState.instance();
+        var blockPosition = placementState.placePosition();
+        var blockFace = placementState.blockFace();
+
+        var block = new BlockUtils((Instance) instance, blockPosition);
 
         if (noDown.contains(blockState.block().name())) {
             var blockNorth = block.north().block().isSolid();
@@ -80,16 +85,25 @@ public class CardinalPlacement extends PlacementRule {
 
             return blockNorth || blockSouth || blockEast || blockWest || blockUp || blockDown;
         }
-        return (block() != Block.VINE || blockFace != Facing.UP) && canAttach(block.relative(blockFace.opposite()).block());
+        return (block() != Block.VINE || blockFace != BlockFace.TOP) && canAttach(block.relative(Facing.parse(blockFace.getOppositeFace())).block());
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return true;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
+        placeOrUpdate((Instance) updateState.instance(), updateState.blockPosition(), blockState);
+    }
+
+    @Override
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        placeOrUpdate((Instance) placementState.instance(), placementState.placePosition(), blockState);
+    }
+
+    public void placeOrUpdate(Instance instance, Point blockPosition, BlockState blockState) {
         var block = new BlockUtils(instance, blockPosition);
 
         var blockNorth = block.north();
@@ -123,11 +137,6 @@ public class CardinalPlacement extends PlacementRule {
             var blockDown = block.down();
             blockState.set(Directional.DOWN, BooleanState.Of(isMushroom != blockDown.block().isSolid()));
         }
-    }
-
-    @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
-        update(instance, blockPosition, blockState);
     }
 
     public static boolean isCardinalBlock(Block block) {

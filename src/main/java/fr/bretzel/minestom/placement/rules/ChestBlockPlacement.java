@@ -1,14 +1,13 @@
 package fr.bretzel.minestom.placement.rules;
 
+import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.ChestType;
 import fr.bretzel.minestom.states.state.Facing;
-import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.utils.block.BlockUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 public class ChestBlockPlacement extends PlacementRule {
     public ChestBlockPlacement(Block block) {
@@ -21,21 +20,23 @@ public class ChestBlockPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
         return true;
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return true;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState state) {
-        var selfBlock = new BlockUtils(instance, blockPosition);
-        var facing = state.get(Facing.class);
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
+        var instance = updateState.instance();
+        var blockPosition = updateState.blockPosition();
+        var selfBlock = new BlockUtils((Instance) instance, blockPosition);
+        var facing = blockState.get(Facing.class);
 
-        var chestType = state.get(ChestType.SINGLE);
+        var chestType = blockState.get(ChestType.SINGLE);
 
         if (chestType == ChestType.SINGLE) {
             switch (facing) {
@@ -51,7 +52,7 @@ public class ChestBlockPlacement extends PlacementRule {
                             var eastType = eastState.get(ChestType.class);
                             var facing1 = getDirectionToAttached(eastState);
                             if (eastBlock.relative(facing1).position().equals(blockPosition)) {
-                                state.set(eastType.opposite());
+                                blockState.set(eastType.opposite());
                             }
                         }
                     }
@@ -61,7 +62,7 @@ public class ChestBlockPlacement extends PlacementRule {
                             var westTpe = westState.get(ChestType.class);
                             var facing1 = getDirectionToAttached(westState);
                             if (westBlock.relative(facing1).position().equals(blockPosition)) {
-                                state.set(westTpe.opposite());
+                                blockState.set(westTpe.opposite());
                             }
                         }
                     }
@@ -78,7 +79,7 @@ public class ChestBlockPlacement extends PlacementRule {
                             var eastType = northState.get(ChestType.class);
                             var facing1 = getDirectionToAttached(northState);
                             if (northBlock.relative(facing1).position().equals(blockPosition)) {
-                                state.set(eastType.opposite());
+                                blockState.set(eastType.opposite());
                             }
                         }
                     }
@@ -88,27 +89,30 @@ public class ChestBlockPlacement extends PlacementRule {
                             var westTpe = southState.get(ChestType.class);
                             var facing1 = getDirectionToAttached(southState);
                             if (southBlock.relative(facing1).position().equals(blockPosition)) {
-                                state.set(westTpe.opposite());
+                                blockState.set(westTpe.opposite());
                             }
                         }
                     }
                 }
             }
         } else {
-            var attachedFacing = getDirectionToAttached(state);
+            var attachedFacing = getDirectionToAttached(blockState);
             var attachedBlock = selfBlock.relative(attachedFacing);
 
             if (!isSameChest(attachedBlock))
-                state.set(ChestType.SINGLE);
+                blockState.set(ChestType.SINGLE);
         }
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = placementState.instance();
+        var blockPosition = placementState.placePosition();
         var chestType = ChestType.SINGLE;
-        var sneaking = pl.isSneaking();
+
+        var sneaking = placementState.isPlayerShifting();
         var facing = blockState.get(Facing.class);
-        var alsBlock = new BlockUtils(instance, blockPosition);
+        var alsBlock = new BlockUtils((Instance) instance, blockPosition);
 
         if (!sneaking) {
             if (facing == getDirectionToAttach(alsBlock, facing.rotateY())) {

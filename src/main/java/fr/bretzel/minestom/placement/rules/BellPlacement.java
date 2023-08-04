@@ -5,10 +5,10 @@ import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.Attachment;
 import fr.bretzel.minestom.states.state.Facing;
 import fr.bretzel.minestom.utils.block.BlockUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 public class BellPlacement extends PlacementRule {
 
@@ -17,19 +17,21 @@ public class BellPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
         return true;
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return true;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         var facing = blockState.get(Facing.class);
         var attachment = blockState.get(Attachment.class);
+        var instance = (Instance) updateState.instance();
+        var blockPosition = updateState.blockPosition();
 
         var selfBlock = new BlockUtils(instance, blockPosition);
         var facingBlock = selfBlock.relative(facing);
@@ -53,10 +55,14 @@ public class BellPlacement extends PlacementRule {
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
-        if (blockFace == Facing.DOWN) {
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = (Instance) placementState.instance();
+        var blockFace = placementState.blockFace();
+        var blockPosition = placementState.placePosition();
+
+        if (blockFace == BlockFace.BOTTOM) {
             blockState.set(Attachment.CEILING);
-        } else if (blockFace == Facing.UP) {
+        } else if (blockFace == BlockFace.TOP) {
             blockState.set(Attachment.FLOOR);
         } else {
             var facing = blockState.get(Facing.class);

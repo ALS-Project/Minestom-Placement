@@ -4,7 +4,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
-var minestomVersion = "42195c536b"
 var statesVersion = "e7732512f4"
 var utilityVersion = "227252e316"
 
@@ -24,13 +23,15 @@ java {
 }
 
 dependencies {
-    shadow("com.github.Minestom:Minestom:$minestomVersion")
+    shadow("dev.hollowcube:minestom-ce:74ca1041f3")
+
+    implementation("dev.hollowcube:minestom-ce-extensions:1.1.1")
 
     implementation("com.github.ALS-Project:Minestom-States:$statesVersion") {
-        exclude group: 'com.github.Minestom', module: 'Minestom'
+        exclude group: 'dev.hollowcube:minestom-ce', module: 'Minestom'
     }
     implementation("com.github.ALS-Project:Minestom-Utilities:$utilityVersion") {
-        exclude group: 'com.github.Minestom', module: 'Minestom'
+        exclude group: 'dev.hollowcube:minestom-ce', module: 'Minestom'
     }
 }
 
@@ -38,7 +39,7 @@ shadowJar {
     archiveFileName = "${rootProject.name}-${version}-extension.jar"
 
     dependencies {
-        exclude(dependency('com.github.Minestom:Minestom:.*'))
+        exclude(dependency('dev.hollowcube:minestom-ce:.*'))
     }
 
     minimize()

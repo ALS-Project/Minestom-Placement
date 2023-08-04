@@ -3,13 +3,10 @@ package fr.bretzel.minestom.placement.rules;
 import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.Directional;
-import fr.bretzel.minestom.states.state.Facing;
 import fr.bretzel.minestom.states.state.IntegerState;
 import fr.bretzel.minestom.states.state.RedstoneWireHeight;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.block.BlockUtils;
 
 public class RedstonePlacement extends PlacementRule {
@@ -21,28 +18,30 @@ public class RedstonePlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
         return true;
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return true;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
-        BlockUtils block = new BlockUtils(instance, blockPosition);
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
+        var instance = updateState.instance();
+        var blockPosition = updateState.blockPosition();
+        var block = new BlockUtils(instance, blockPosition);
 
-        RedstoneWireHeight east = RedstoneWireHeight.NONE;
-        RedstoneWireHeight north = RedstoneWireHeight.NONE;
-        RedstoneWireHeight south = RedstoneWireHeight.NONE;
-        RedstoneWireHeight west = RedstoneWireHeight.NONE;
+        var east = RedstoneWireHeight.NONE;
+        var north = RedstoneWireHeight.NONE;
+        var south = RedstoneWireHeight.NONE;
+        var west = RedstoneWireHeight.NONE;
 
-        final BlockUtils blockNorth = block.north();
-        final BlockUtils blockSouth = block.south();
-        final BlockUtils blockEast = block.east();
-        final BlockUtils blockWest = block.west();
+        final var blockNorth = block.north();
+        final var blockSouth = block.south();
+        final var blockEast = block.east();
+        final var blockWest = block.west();
 
         int connected = 0;
 
@@ -107,7 +106,7 @@ public class RedstonePlacement extends PlacementRule {
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player pl) {
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
 
     }
 }

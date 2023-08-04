@@ -1,14 +1,13 @@
 package fr.bretzel.minestom.placement.rules;
 
-import fr.bretzel.minestom.states.BlockState;
-import fr.bretzel.minestom.states.state.Facing;
-import fr.bretzel.minestom.states.state.PlantHalf;
 import fr.bretzel.minestom.placement.PlacementRule;
+import fr.bretzel.minestom.states.BlockState;
+import fr.bretzel.minestom.states.state.PlantHalf;
 import fr.bretzel.minestom.utils.block.BlockUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,30 +20,35 @@ public class DoublePlantPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
-        var self = new BlockUtils(instance, blockPosition);
-        return blockPosition.y() < 255 && self.block().isAir() && self.up().block().isAir() || !(blockFace == Facing.DOWN);
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = placementState.instance();
+        var blockPosition = placementState.placePosition();
+        var blockFace = placementState.blockFace();
+        var self = new BlockUtils((Instance) instance, blockPosition);
+        return blockPosition.y() < 255 && self.block().isAir() && self.up().block().isAir() || !(blockFace == BlockFace.BOTTOM);
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return false;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
 
     }
 
     @Override
-    public void place(Instance instance, BlockState selfState, Facing blockFace, Point blockPosition, Player pl) {
-        var downBlock = new BlockUtils(instance, blockPosition).down();
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var instance = placementState.instance();
+        var blockPosition = placementState.placePosition();
+        var downBlock = new BlockUtils((Instance) instance, blockPosition).down();
         var plantHalf = PlantHalf.LOWER;
 
-        if (downBlock.equals(selfState.block()))
+        if (downBlock.equals(blockState.block()))
             plantHalf = PlantHalf.UPPER;
 
-        selfState.set(plantHalf);
+        blockState.set(plantHalf);
     }
 
     public static boolean isDoublePlant(Block block) {

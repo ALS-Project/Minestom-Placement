@@ -8,14 +8,12 @@ public class BlockPlacementExtension extends Extension {
 
     private final Logger LOGGER = LoggerFactory.getLogger(BlockPlacementExtension.class);
 
-    @Override
     public void initialize() {
         LOGGER.info("Starting to register all block placement !");
         BlockPlacementManager.register();
         LOGGER.info("End !");
     }
 
-    @Override
     public void terminate() {
 
     }

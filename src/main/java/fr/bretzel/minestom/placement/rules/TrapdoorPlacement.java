@@ -1,15 +1,12 @@
 package fr.bretzel.minestom.placement.rules;
 
+import fr.bretzel.minestom.placement.PlacementRule;
 import fr.bretzel.minestom.states.BlockState;
 import fr.bretzel.minestom.states.state.Facing;
 import fr.bretzel.minestom.states.state.Half;
-import fr.bretzel.minestom.placement.PlacementRule;
-import fr.bretzel.minestom.utils.raytrace.RayTrace;
-import fr.bretzel.minestom.utils.raytrace.RayTraceContext;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.rule.BlockPlacementRule;
 
 public class TrapdoorPlacement extends PlacementRule {
     public TrapdoorPlacement(Block block) {
@@ -17,40 +14,43 @@ public class TrapdoorPlacement extends PlacementRule {
     }
 
     @Override
-    public boolean canPlace(Instance instance, Facing blockFace, Point blockPosition, BlockState blockState, Player pl) {
+    public boolean canPlace(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
         return true;
     }
 
     @Override
-    public boolean canUpdate(Instance instance, Point blockPosition, BlockState blockState) {
+    public boolean canUpdate(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
         return false;
     }
 
     @Override
-    public void update(Instance instance, Point blockPosition, BlockState blockState) {
+    public void update(BlockState blockState, BlockPlacementRule.UpdateState updateState) {
 
     }
 
     @Override
-    public void place(Instance instance, BlockState blockState, Facing blockFace, Point blockPosition, Player player) {
-        if (blockFace == Facing.UP) {
+    public void place(BlockState blockState, BlockPlacementRule.PlacementState placementState) {
+        var blockFace = placementState.blockFace();
+        var facing = Facing.parse(blockFace);
+
+        if (blockFace == BlockFace.TOP) {
             blockState.set(Half.BOTTOM);
-        } else if (blockFace == Facing.DOWN) {
+        } else if (blockFace == BlockFace.BOTTOM) {
             blockState.set(Half.TOP);
         } else {
-            var result = RayTrace.rayTraceBlock(new RayTraceContext(player, 5));
-            if (result != null && result.getHit() != null && !result.getHitBlock().isAir()) {
-                var hit = result.getHit();
+            var hit = placementState.cursorPosition();
+
+            if (hit != null) {
                 var y = hit.y() - ((int) hit.y());
 
                 blockState.set((y >= 0.45) ? Half.TOP : Half.BOTTOM);
             }
         }
 
-        if (blockFace.getAxis().isHorizontal())
-            blockState.set(blockFace);
+        if (facing.getAxis().isHorizontal())
+            blockState.set(facing);
 
-        if (blockFace == Facing.DOWN || blockFace == Facing.UP)
+        if (facing == Facing.DOWN || facing == Facing.UP)
             blockState.set(blockState.get(Facing.class).opposite());
     }
 }
